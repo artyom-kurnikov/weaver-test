@@ -1,21 +1,21 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import App from './App';
-import './app.global.css';
+import Root from './Root';
+import './app.global.scss';
 
 const renderTo = document.getElementById('root');
 
 render(
   <AppContainer>
-    <App />
+    <Root />
   </AppContainer>,
   renderTo
 );
 
 if (module.hot) {
-  module.hot.accept('./App', () => {
-    const NextRoot = require('./App');
+  module.hot.accept('./Root', () => {
+    const NextRoot = require('./Root');
 
     render(
       <AppContainer>
