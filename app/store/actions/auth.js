@@ -5,16 +5,17 @@ import {
   REGISTRATION_FAILED,
   REQUEST_LOGIN,
   LOGIN_SUCCESS,
-  LOGIN_FAILED
+  LOGIN_FAILED,
+  RESET_ME
 } from '../reducers/me';
 
 const requestTypes = {
-  signIn: [
+  signUp: [
     REQUEST_REGISTRATION,
     REGISTRATION_SUCCESS,
     REGISTRATION_FAILED
   ],
-  signUp: [
+  signIn: [
     REQUEST_LOGIN,
     LOGIN_SUCCESS,
     LOGIN_FAILED
@@ -27,20 +28,27 @@ const auth = type => userData => dispatch => {
   dispatch({ type: REQUEST });
 
   return weaverService[type](userData)
-    .then(user =>
+    .then(user => {
       dispatch({
         type: SUCCESS,
         payload: user
-      })
-    )
+      });
+      localStorage.setItem('authToken', user.authToken);
+    })
     .catch(err => {
       dispatch({
         type: FAIL
       });
-      console.error(err);
-    })
+
+      // If not have a code then it's an application error
+      if (!err.code) console.error(err);
+
+      throw err;
+    });
 };
 
 export const login = auth('signIn');
 
 export const register = auth('signUp');
+
+export const resetMe = () => ({ type: RESET_ME });

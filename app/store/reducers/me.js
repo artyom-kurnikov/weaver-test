@@ -1,3 +1,5 @@
+import { changeFieldsForState } from "../../helpers";
+
 export const FILL_ME = 'FILL_ME';
 export const REQUEST_REGISTRATION = 'REQUEST_REGISTRATION';
 export const REGISTRATION_SUCCESS = 'REGISTRATION_SUCCESS';
@@ -5,24 +7,26 @@ export const REGISTRATION_FAILED = 'REGISTRATION_FAILED';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const RESET_ME = 'RESET_ME';
 
-const initialState = {
+const getInitialState = () => ({
   userId: '',
   email: '',
   username: '',
   isRegistering: false,
   isLoggingIn: false,
   isLoggedIn: false
-};
-
-const fieldToValue = (fieldName, value) => state => ({
-  ...state,
-  [fieldName]: value
 });
 
-const isRegisteringToFalse = fieldToValue('isRegistering', false);
+const registrationPassed = changeFieldsForState({
+  isRegistering: false,
+  isLoggedIn: true
+});
 
-const isLoggingInToFalse = fieldToValue('isLoggingIn', false);
+const loginPassed = changeFieldsForState({
+  isLoggingIn: false,
+  isLoggedIn: true
+});
 
 const fillMe = (state, action) => ({
   ...state,
@@ -34,22 +38,24 @@ const fillMe = (state, action) => ({
 const types = {
   [FILL_ME]: fillMe,
 
-  [REQUEST_REGISTRATION]: fieldToValue('isRegistering', true),
+  [REQUEST_REGISTRATION]: changeFieldsForState({ isRegistering: true }),
 
   [REGISTRATION_SUCCESS]: (state, action) =>
-    isRegisteringToFalse(fillMe(state, action)),
+    registrationPassed(fillMe(state, action)),
 
-  [REGISTRATION_FAILED]: isRegisteringToFalse,
+  [REGISTRATION_FAILED]: changeFieldsForState({ isRegistering: false }),
 
-  [REQUEST_LOGIN]: fieldToValue('isLoggingIn', true),
+  [REQUEST_LOGIN]: changeFieldsForState({ isLoggingIn: true }),
 
   [LOGIN_SUCCESS]: (state, action) =>
-    isLoggingInToFalse(fillMe(state, action)),
+    loginPassed(fillMe(state, action)),
 
-  [LOGIN_FAILED]: isLoggingInToFalse
+  [LOGIN_FAILED]: changeFieldsForState({ isLoggingIn: false }),
+
+  [RESET_ME]: getInitialState
 };
 
-export default (state = initialState, action) =>
+export default (state = getInitialState(), action) =>
   types[action.type]
     ? types[action.type](state, action)
     : state;

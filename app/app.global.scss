@@ -41,12 +41,14 @@ body {
 }
 
 .back-btn {
+  padding: 0 12px;
+  background-color: #dcdcdc;
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 0;
   text-decoration: none;
   font-size: 20px;
-  color: #a0a0a0;
+  color: white;
 }
 
 .login, .register {
@@ -108,4 +110,30 @@ input {
   display: flex;
   flex-direction: row-reverse;
   margin: 25px 0;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+
+  .main-info {
+    margin-top: 80px;
+    width: 80%;
+    min-width: 400px;
+    max-width: 520px;
+    color: #676767;
+
+    h1 {
+      font-size: 36px;
+      font-style: italic;
+    }
+
+    span {
+      color: #353535;
+    }
+
+    & > * {
+      margin-top: 20px;
+    }
+  }
 }

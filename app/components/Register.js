@@ -13,7 +13,11 @@ class Register extends Component {
   onSubmit = ev => {
     ev.preventDefault();
 
-    this.props.register(this.state);
+    this.props.register(this.state)
+      .then(() =>
+        this.props.history.push('/dashboard')
+      )
+      .catch(err => alert(err.message || 'Something went wrong'));
   };
 
   onChangeFor = fieldName => ev =>
@@ -30,17 +34,17 @@ class Register extends Component {
             <form onSubmit={this.onSubmit}>
               <input
                 type="text"
-                placeholder="Username"
-                value={username}
-                onChange={this.onChangeFor('username')} />
-              <input
-                type="text"
-                placeholder="Email"
+                placeholder="email"
                 value={email}
                 onChange={this.onChangeFor('email')} />
               <input
+                type="text"
+                placeholder="username"
+                value={username}
+                onChange={this.onChangeFor('username')} />
+              <input
                 type="password"
-                placeholder="Password"
+                placeholder="password"
                 value={password}
                 onChange={this.onChangeFor('password')} />
               <div className="btn-container">
@@ -60,7 +64,7 @@ class Register extends Component {
 }
 
 const enhance = connect(
-  state => ({ isRegistering: state.isRegistering }),
+  state => ({ isRegistering: state.me.isRegistering }),
   dispatch => ({ register: userData => dispatch(register(userData)) })
 );
 

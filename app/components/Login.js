@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Card from './Card';
+import { login } from '../store/actions/auth';
+import { connect } from "react-redux";
 
 class Login extends Component {
   state = {
@@ -9,10 +11,21 @@ class Login extends Component {
 
   onSubmit = ev => {
     ev.preventDefault();
+
+    this.props.login(this.state)
+      .then(() =>
+        this.props.history.push('/dashboard')
+      )
+      .catch(err => alert(
+        err.code
+          ? err.message
+          : 'Something went wrong')
+      );
   };
 
   render() {
     const { username, password } = this.state;
+    const { isLoggingIn } = this.props;
 
     return (
       <div className="login">
@@ -21,16 +34,21 @@ class Login extends Component {
             <form onSubmit={this.onSubmit}>
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="username"
                 value={username}
                 onChange={ev => this.setState({ username: ev.target.value })} />
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="password"
                 value={password}
                 onChange={ev => this.setState({ password: ev.target.value })} />
               <div className="btn-container">
-                <button type="submit">LOGIN</button>
+                <button
+                  className={isLoggingIn ? 'disabled' : ''}
+                  type="submit"
+                  disabled={isLoggingIn}>
+                  LOGIN
+                </button>
               </div>
             </form>
           </div>
@@ -40,4 +58,9 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const enhance = connect(
+  state => ({ isLoggingIn: state.me.isLoggingIn}),
+  dispatch => ({ login: userData => dispatch(login(userData)) })
+);
+
+export default enhance(Login);
