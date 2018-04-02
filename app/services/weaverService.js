@@ -8,40 +8,26 @@ const weaver = new Weaver();
 const connect = (hostUrl = HOST_URL) =>
   weaver.connect(hostUrl);
 
-const signUp = userData => {
-  const { username, password, email } = userData;
-  const user = new Weaver.User(username, password, email);
+const signUp = ({ username, password, email }) =>
+  (new Weaver.User(username, password, email))
+    .signUp();
 
-  return user.signUp();
-};
-
-const signIn = userData => {
-  const { username, password } = userData;
-
-  return weaver.signInWithUsername(username, password);
-};
-
-const signInWithToken = token =>
-  weaver.signInWithToken(token);
+const signIn = userData =>
+  (typeof userData === 'string')
+    ? weaver.signInWithToken(userData)
+    : weaver.signInWithUsername(
+      userData.username,
+      userData.password
+    );
 
 const getCurrentUser = () =>
   weaver.currentUser();
-
-const getCurrentUserAuthToken = () => {
-  const user = weaver.currentUser();
-
-  return user ? user.authToken : null;
-};
 
 const weaverService = {
   connect,
   signUp,
   signIn,
-  signInWithToken,
-  getCurrentUser,
-  getCurrentUserAuthToken
+  getCurrentUser
 };
-
-window.weaverService = weaverService;
 
 export default weaverService;

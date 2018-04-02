@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { login } from "../store/actions/auth";
 
-export default class Start extends Component {
+class Start extends Component {
+  componentDidMount() {
+    const token = localStorage.getItem('authToken');
+
+    if (token) this.props.login(token)
+      .then(() =>
+        this.props.history.push('/dashboard')
+      )
+  }
+
   render() {
     return (
       <div className="start-page">
@@ -15,3 +26,10 @@ export default class Start extends Component {
     );
   }
 }
+
+const enhance = connect(
+  (_, ownProps) => ownProps,
+  dispatch => ({ login: token => dispatch(login(token)) })
+);
+
+export default enhance(Start);

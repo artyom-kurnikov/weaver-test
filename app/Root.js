@@ -19,7 +19,8 @@ class Root extends Component {
       .catch(err => alert(
         err.code
           ? err.message
-          : 'Something went wrong')
+          : 'Something went wrong'
+        )
       );
   }
 
@@ -38,7 +39,7 @@ class Root extends Component {
         </Provider>
       )
       : (
-        <div>Server in not loaded...</div>
+        <div>Loading...</div>
       )
   }
 }
