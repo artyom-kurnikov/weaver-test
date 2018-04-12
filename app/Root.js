@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import store from './store';
 import weaverService from './services/weaverService';
 import Start from './components/Start';
@@ -28,14 +28,14 @@ class Root extends Component {
     return this.state.isConnected
       ? (
         <Provider store={store}>
-          <BrowserRouter>
+          <HashRouter>
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="*" component={Start} />
             </Switch>
-          </BrowserRouter>
+          </HashRouter>
         </Provider>
       )
       : (
